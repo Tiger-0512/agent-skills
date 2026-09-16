@@ -30,16 +30,16 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: >-
           python3 scripts/update-upstream-code-review.py sync
-          --manifest skills/iterative-code-review/upstream-code-review.json
+          --manifest skills/standards-spec-review-loop/upstream-code-review.json
           --github-output "$GITHUB_OUTPUT"
 
       - name: Run deterministic tests
         if: steps.sync.outputs.changed == 'true'
         run: |
           python3 -m unittest discover -s tests -v
-          python3 -m unittest discover -s skills/iterative-code-review/tests -v
+          python3 -m unittest discover -s skills/standards-spec-review-loop/tests -v
           python3 -m py_compile scripts/update-upstream-code-review.py
-          python3 -m py_compile skills/iterative-code-review/scripts/review-loop-state.py
+          python3 -m py_compile skills/standards-spec-review-loop/scripts/review-loop-state.py
           git diff --check
 
       - name: Create draft pull request
@@ -63,9 +63,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add \
-            skills/iterative-code-review/upstream-code-review.json \
-            skills/iterative-code-review/upstream/code-review.SKILL.md \
-            skills/iterative-code-review/LICENSES/mattpocock-skills-MIT.txt
+            skills/standards-spec-review-loop/upstream-code-review.json \
+            skills/standards-spec-review-loop/upstream/code-review.SKILL.md \
+            skills/standards-spec-review-loop/LICENSES/mattpocock-skills-MIT.txt
           git diff --cached --check
           git commit -m "Update bundled code-review to ${SHORT_SHA}"
           git push origin "$branch"
@@ -86,7 +86,7 @@ jobs:
 
           - [ ] Review the upstream diff for behavior changes
           - [ ] Reconcile relevant changes into \`references/code-review-protocol.md\`
-          - [ ] Run \`python3 scripts/update-upstream-code-review.py mark-reviewed --manifest skills/iterative-code-review/upstream-code-review.json\`
+          - [ ] Run \`python3 scripts/update-upstream-code-review.py mark-reviewed --manifest skills/standards-spec-review-loop/upstream-code-review.json\`
           - [ ] Run the validation commands from the repository README
           - [ ] Mark this PR ready for review
           - [ ] Merge manually after approval and green checks

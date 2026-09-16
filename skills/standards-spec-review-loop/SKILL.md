@@ -1,11 +1,11 @@
 ---
-name: iterative-code-review
+name: standards-spec-review-loop
 description: "Repeatedly review, adjudicate, fix, and validate a code change until fresh Standards and Spec reviews find no valid in-scope findings. Use when the user asks for iterative self-review, review-fix-review loops, or remediation until clean; not for review-only requests."
-version: 1.1.0
+version: 2.0.0
 tags: [skill, code-review, remediation, convergence]
 ---
 
-# Iterative Code Review
+# Standards-Spec Review Loop
 
 ## Overview
 
@@ -38,7 +38,7 @@ You **MUST NOT** substitute a different review procedure because doing so would 
 
 ## Workflow
 
-After reading the bundled review protocol, You **MUST** read and execute [agent-sops/iterative-code-review.sop.md](agent-sops/iterative-code-review.sop.md).
+After reading the bundled review protocol, You **MUST** read and execute [agent-sops/standards-spec-review-loop.sop.md](agent-sops/standards-spec-review-loop.sop.md).
 
 You **MUST NOT** replace the two independent review axes with one combined reviewer because shared context allows one axis to mask the other.
 

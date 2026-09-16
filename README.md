@@ -2,9 +2,9 @@
 
 Reusable skills for software engineering agents.
 
-## Iterative Code Review
+## Standards-Spec Review Loop
 
-`iterative-code-review` repeatedly runs independent Standards and Spec reviews, adjudicates every candidate finding, repairs valid in-scope findings, validates the change, and starts a fresh review round. It succeeds only when both axes have no valid findings and final validation passes.
+`standards-spec-review-loop` repeatedly runs independent Standards and Spec reviews, adjudicates every candidate finding, repairs valid in-scope findings, validates the change, and starts a fresh review round. It succeeds only when both axes have no valid findings and final validation passes.
 
 ### Features
 
@@ -19,15 +19,17 @@ Reusable skills for software engineering agents.
 ## Install
 
 ```bash
-npx skills@latest add Tiger-0512/agent-skills --skill iterative-code-review
+npx skills@latest add Tiger-0512/agent-skills --skill standards-spec-review-loop
 ```
+
+This skill was previously published as `iterative-code-review`. The repository now exposes only `standards-spec-review-loop`; existing users should install the new slug.
 
 ## Usage
 
 Invoke the installed skill by name or ask your agent to use it:
 
 ```text
-Use iterative-code-review to review and fix this branch until no valid findings remain.
+Use standards-spec-review-loop to review and fix this branch until no valid findings remain.
 Fixed point: origin/main
 ```
 
@@ -37,7 +39,7 @@ Default safety bounds are five completed review rounds and two consecutive no-re
 
 The two-axis review protocol is adapted from [Matt Pocock's `code-review` skill](https://www.skills.sh/mattpocock/skills/code-review) at the source file's upstream commit [`5c89081d4bbeb3d039a42093653f90bb698d780e`](https://github.com/mattpocock/skills/commit/5c89081d4bbeb3d039a42093653f90bb698d780e).
 
-The adapted protocol and required attribution are shipped inside `iterative-code-review`, so users do not need to install or configure another skill. The bundled upstream-derived material remains available under Matt Pocock's MIT License; see `skills/iterative-code-review/LICENSES/mattpocock-skills-MIT.txt`.
+The adapted protocol and required attribution are shipped inside `standards-spec-review-loop`, so users do not need to install or configure another skill. The bundled upstream-derived material remains available under Matt Pocock's MIT License; see `skills/standards-spec-review-loop/LICENSES/mattpocock-skills-MIT.txt`.
 
 ## Upstream updates
 
@@ -47,7 +49,7 @@ The generated PR deliberately sets `adaptation.status` to `pending`. A human mus
 
 ```bash
 python3 scripts/update-upstream-code-review.py mark-reviewed \
-  --manifest skills/iterative-code-review/upstream-code-review.json
+  --manifest skills/standards-spec-review-loop/upstream-code-review.json
 ```
 
 `Validate` rejects a pending adaptation, so the update cannot reach a merge-ready state without this review. The workflow never enables auto-merge.
@@ -60,16 +62,16 @@ Run the deterministic state-checker and upstream-maintenance tests:
 
 ```bash
 python3 scripts/update-upstream-code-review.py validate \
-  --manifest skills/iterative-code-review/upstream-code-review.json
+  --manifest skills/standards-spec-review-loop/upstream-code-review.json
 
 python3 -m unittest discover -s tests -v
 
 python3 -m unittest discover \
-  -s skills/iterative-code-review/tests -v
+  -s skills/standards-spec-review-loop/tests -v
 
 python3 -m py_compile \
   scripts/update-upstream-code-review.py \
-  skills/iterative-code-review/scripts/review-loop-state.py
+  skills/standards-spec-review-loop/scripts/review-loop-state.py
 ```
 
 The implementation uses only the Python standard library.
@@ -80,4 +82,4 @@ This repository's two-axis review protocol is adapted from Matt Pocock's [`code-
 
 ## License
 
-Original content in this repository is licensed under the MIT License. See [LICENSE](LICENSE). Upstream-derived material retains its original notice in `skills/iterative-code-review/LICENSES/mattpocock-skills-MIT.txt`.
+Original content in this repository is licensed under the MIT License. See [LICENSE](LICENSE). Upstream-derived material retains its original notice in `skills/standards-spec-review-loop/LICENSES/mattpocock-skills-MIT.txt`.
