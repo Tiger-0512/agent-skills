@@ -1,0 +1,35 @@
+name: Validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Verify reviewed upstream adaptation
+        run: >-
+          python3 scripts/update-upstream-code-review.py validate
+          --manifest skills/iterative-code-review/upstream-code-review.json
+
+      - name: Run unit tests
+        run: |
+          python3 -m unittest discover -s tests -v
+          python3 -m unittest discover -s skills/iterative-code-review/tests -v
+
+      - name: Check Python syntax
+        run: |
+          python3 -m py_compile scripts/update-upstream-code-review.py
+          python3 -m py_compile skills/iterative-code-review/scripts/review-loop-state.py
+
+      - name: Check whitespace
+        run: git diff --check

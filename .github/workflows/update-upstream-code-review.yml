@@ -1,0 +1,102 @@
+name: Update upstream code-review
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: update-upstream-code-review
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Synchronize upstream snapshot
+        id: sync
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: >-
+          python3 scripts/update-upstream-code-review.py sync
+          --manifest skills/iterative-code-review/upstream-code-review.json
+          --github-output "$GITHUB_OUTPUT"
+
+      - name: Run deterministic tests
+        if: steps.sync.outputs.changed == 'true'
+        run: |
+          python3 -m unittest discover -s tests -v
+          python3 -m unittest discover -s skills/iterative-code-review/tests -v
+          python3 -m py_compile scripts/update-upstream-code-review.py
+          python3 -m py_compile skills/iterative-code-review/scripts/review-loop-state.py
+          git diff --check
+
+      - name: Create draft pull request
+        if: steps.sync.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          UPSTREAM_COMMIT: ${{ steps.sync.outputs.upstream_commit }}
+          PREVIOUS_COMMIT: ${{ steps.sync.outputs.previous_commit }}
+          SHORT_SHA: ${{ steps.sync.outputs.short_sha }}
+          COMPARE_URL: ${{ steps.sync.outputs.compare_url }}
+        run: |
+          set -euo pipefail
+          branch="automation/update-code-review-${SHORT_SHA}"
+          existing="$(gh pr list --state all --head "$branch" --json url --jq '.[0].url // empty')"
+          if [[ -n "$existing" ]]; then
+            echo "An update pull request already exists: $existing"
+            exit 0
+          fi
+
+          git switch -c "$branch"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            skills/iterative-code-review/upstream-code-review.json \
+            skills/iterative-code-review/upstream/code-review.SKILL.md \
+            skills/iterative-code-review/LICENSES/mattpocock-skills-MIT.txt
+          git diff --cached --check
+          git commit -m "Update bundled code-review to ${SHORT_SHA}"
+          git push origin "$branch"
+
+          body="$RUNNER_TEMP/upstream-code-review-pr.md"
+          cat >"$body" <<EOF
+          ## Automated upstream update
+
+          A newer Matt Pocock \`code-review\` source was detected.
+
+          - Previous reviewed commit: \`${PREVIOUS_COMMIT}\`
+          - New upstream commit: \`${UPSTREAM_COMMIT}\`
+          - [Review the upstream comparison](${COMPARE_URL})
+
+          This PR intentionally updates only the upstream snapshot, license, and manifest. The active adapted protocol remains unchanged and the manifest is now \`pending\`.
+
+          ## Human review required
+
+          - [ ] Review the upstream diff for behavior changes
+          - [ ] Reconcile relevant changes into \`references/code-review-protocol.md\`
+          - [ ] Run \`python3 scripts/update-upstream-code-review.py mark-reviewed --manifest skills/iterative-code-review/upstream-code-review.json\`
+          - [ ] Run the validation commands from the repository README
+          - [ ] Mark this PR ready for review
+          - [ ] Merge manually after approval and green checks
+
+          Do not merge while \`adaptation.status\` is \`pending\`.
+          EOF
+
+          gh pr create \
+            --draft \
+            --base main \
+            --head "$branch" \
+            --title "Update bundled code-review to ${SHORT_SHA}" \
+            --body-file "$body"

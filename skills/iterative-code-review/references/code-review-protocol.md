@@ -1,6 +1,6 @@
 # Bundled Two-Axis Code Review Protocol
 
-Adapted from Matt Pocock's [`code-review`](https://github.com/mattpocock/skills/tree/main/skills/engineering/code-review) skill at commit [`959a8e9f1edc3adbe2f7e3054bb6fbefa6696260`](https://github.com/mattpocock/skills/commit/959a8e9f1edc3adbe2f7e3054bb6fbefa6696260).
+Adapted from Matt Pocock's [`code-review`](https://github.com/mattpocock/skills/tree/main/skills/engineering/code-review) skill at the source file's commit [`5c89081d4bbeb3d039a42093653f90bb698d780e`](https://github.com/mattpocock/skills/commit/5c89081d4bbeb3d039a42093653f90bb698d780e).
 
 Copyright (c) 2026 Matt Pocock. Adapted and redistributed under the MIT License. The complete notice is in `../LICENSES/mattpocock-skills-MIT.txt`.
 
