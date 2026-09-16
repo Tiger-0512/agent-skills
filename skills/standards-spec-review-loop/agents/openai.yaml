@@ -1,0 +1,3 @@
+interface:
+  display_name: "Standards-Spec Review Loop"
+  short_description: "Converge Standards and Spec reviews until clean"

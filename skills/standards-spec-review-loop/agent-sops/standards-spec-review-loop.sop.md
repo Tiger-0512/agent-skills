@@ -1,4 +1,4 @@
-# Iterative Code Review
+# Standards-Spec Review Loop
 
 ## Overview
 
@@ -58,7 +58,7 @@ Resolve the fixed point once and identify the specification and standards source
 Create a state file outside the reviewed diff and initialize it with the pinned baseline.
 
 **Constraints:**
-- You MUST choose `STATE_FILE` under a runtime-provided session scratch directory when one is available; otherwise You MUST use a unique path returned by `git rev-parse --git-path iterative-code-review`.
+- You MUST choose `STATE_FILE` under a runtime-provided session scratch directory when one is available; otherwise You MUST use a unique path returned by `git rev-parse --git-path standards-spec-review-loop`.
 - You MUST run `scripts/review-loop-state.py init --state "$STATE_FILE" --fixed-point "$FIXED_POINT" --baseline-sha "$BASELINE_SHA"` from this skill's directory.
 - You MUST verify that the script returns `status: initialized` before proceeding.
 - You MUST NOT store loop state in a tracked repository path because orchestration metadata must not enter the product diff.
@@ -234,7 +234,7 @@ Allowed values:
 
 ### The bundled review protocol is missing
 
-Reinstall `iterative-code-review` from its published source. Do not continue without both the protocol and upstream MIT notice because the review contract and attribution would be incomplete.
+Reinstall `standards-spec-review-loop` from its published source. Do not continue without both the protocol and upstream MIT notice because the review contract and attribution would be incomplete.
 
 ### A reviewer axis fails
 

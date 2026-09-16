@@ -19,17 +19,17 @@ jobs:
       - name: Verify reviewed upstream adaptation
         run: >-
           python3 scripts/update-upstream-code-review.py validate
-          --manifest skills/iterative-code-review/upstream-code-review.json
+          --manifest skills/standards-spec-review-loop/upstream-code-review.json
 
       - name: Run unit tests
         run: |
           python3 -m unittest discover -s tests -v
-          python3 -m unittest discover -s skills/iterative-code-review/tests -v
+          python3 -m unittest discover -s skills/standards-spec-review-loop/tests -v
 
       - name: Check Python syntax
         run: |
           python3 -m py_compile scripts/update-upstream-code-review.py
-          python3 -m py_compile skills/iterative-code-review/scripts/review-loop-state.py
+          python3 -m py_compile skills/standards-spec-review-loop/scripts/review-loop-state.py
 
       - name: Check whitespace
         run: git diff --check

@@ -1,3 +1,0 @@
-interface:
-  display_name: "Iterative Code Review"
-  short_description: "Review and fix repeatedly until clean"
