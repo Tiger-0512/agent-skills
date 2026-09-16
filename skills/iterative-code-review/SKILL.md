@@ -1,7 +1,7 @@
 ---
 name: iterative-code-review
 description: "Repeatedly review, adjudicate, fix, and validate a code change until fresh Standards and Spec reviews find no valid in-scope findings. Use when the user asks for iterative self-review, review-fix-review loops, or remediation until clean; not for review-only requests."
-version: 1.0.0
+version: 1.1.0
 tags: [skill, code-review, remediation, convergence]
 ---
 
@@ -9,7 +9,7 @@ tags: [skill, code-review, remediation, convergence]
 
 ## Overview
 
-This skill drives a bounded review → adjudicate → repair → validate → fresh-review loop. It composes Matt Pocock's separately distributed `code-review` skill for the Standards and Spec axes and succeeds only when both axes have zero valid in-scope findings and final validation passes.
+This skill drives a bounded review → adjudicate → repair → validate → fresh-review loop. It includes an adapted two-axis Standards and Spec review protocol and succeeds only when both axes have zero valid in-scope findings and final validation passes.
 
 ## Usage
 
@@ -28,23 +28,17 @@ Do not use this skill for review-only requests, or when the user forbids code ch
 - **Convergence:** Success requires zero actionable or deferred findings plus passing validation.
 - **Bounded execution:** Maximum-round, repeated-finding, no-progress, cycle, and external-change guards prevent runaway repair loops.
 
-## Dependency
+## Bundled Review Protocol
 
-This skill requires Matt Pocock's [`code-review`](https://www.skills.sh/mattpocock/skills/code-review) skill. It is not bundled here.
+You **MUST** read [references/code-review-protocol.md](references/code-review-protocol.md) before starting. It defines fixed-point resolution, specification and standards discovery, the smell baseline, independent reviewer prompts, and the two-axis output contract.
 
-You **MUST** verify that `code-review` is available before starting. If it is unavailable, You **MUST** stop and provide this installation command:
+The protocol is adapted from Matt Pocock's `code-review` skill under the MIT License. The required upstream notice is included in [LICENSES/mattpocock-skills-MIT.txt](LICENSES/mattpocock-skills-MIT.txt).
 
-```bash
-npx skills@latest add mattpocock/skills --skill code-review
-```
-
-If `docs/agents/issue-tracker.md` is missing in the reviewed repository, You **MUST** tell the user to run `/setup-matt-pocock-skills` there before relying on automatic specification discovery.
-
-You **MUST NOT** silently substitute another review procedure because doing so would change the documented Standards and Spec contract.
+You **MUST NOT** substitute a different review procedure because doing so would change the documented Standards and Spec contract.
 
 ## Workflow
 
-You **MUST** load the installed `code-review` skill, then read and execute [agent-sops/iterative-code-review.sop.md](agent-sops/iterative-code-review.sop.md).
+After reading the bundled review protocol, You **MUST** read and execute [agent-sops/iterative-code-review.sop.md](agent-sops/iterative-code-review.sop.md).
 
 You **MUST NOT** replace the two independent review axes with one combined reviewer because shared context allows one axis to mask the other.
 
@@ -73,7 +67,7 @@ The script uses only the Python standard library. The SOP defines the round-file
 
 | Situation | Required outcome |
 |---|---|
-| Required `code-review` skill is unavailable | Stop and provide its install command |
+| Bundled review protocol or license notice is missing | Stop because the installation is incomplete |
 | Both axes have no valid findings and validation passes | `success` |
 | Repairs and validation pass, but the round found valid issues | `continue` with fresh reviewers |
 | A safety bound, deferred finding, failed repair, or external change blocks progress | `stop` with evidence |

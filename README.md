@@ -14,22 +14,9 @@ Reusable skills for software engineering agents.
 - Requires targeted validation after every repair round
 - Detects repeated findings, no-progress cycles, and maximum-round exhaustion
 - Does not commit, push, publish comments, approve, or merge without explicit authorization
-
-## Prerequisite
-
-This skill composes [Matt Pocock's `code-review` skill](https://www.skills.sh/mattpocock/skills/code-review). The upstream skill is not bundled in this repository.
-
-Install and configure the prerequisite first:
-
-```bash
-npx skills@latest add mattpocock/skills --skill code-review
-```
-
-Then run `/setup-matt-pocock-skills` once in each repository where you want issue-tracker and specification discovery.
+- Includes its review protocol, so no prerequisite skill or paid Pack is required
 
 ## Install
-
-After installing the prerequisite:
 
 ```bash
 npx skills@latest add Tiger-0512/agent-skills --skill iterative-code-review
@@ -46,22 +33,11 @@ Fixed point: origin/main
 
 Default safety bounds are five completed review rounds and two consecutive no-reduction transitions. The skill stops without claiming convergence if a bound fires, validation remains broken, a finding needs a user decision, or the repository changes unexpectedly.
 
-## One-command installation with a skills.sh Pack
+## Bundled review protocol
 
-After this repository is public and `iterative-code-review` has appeared on skills.sh:
+The two-axis review protocol is adapted from [Matt Pocock's `code-review` skill](https://www.skills.sh/mattpocock/skills/code-review) at upstream commit [`959a8e9f1edc3adbe2f7e3054bb6fbefa6696260`](https://github.com/mattpocock/skills/commit/959a8e9f1edc3adbe2f7e3054bb6fbefa6696260).
 
-1. Open [Create pack](https://skills.sh/packs/create) and sign in with Vercel.
-2. Add [Matt Pocock's `code-review`](https://www.skills.sh/mattpocock/skills/code-review).
-3. Add `Tiger-0512/agent-skills@iterative-code-review`.
-4. Create the pack and add its generated install command to this README.
-
-Pack users will install both skills with one command:
-
-```bash
-npx skills add https://skills.sh/p/<pack-id>
-```
-
-Packs are unlisted rather than access-controlled. Do not add secrets or credentials.
+The adapted protocol and required attribution are shipped inside `iterative-code-review`, so users do not need to install or configure another skill. The bundled upstream-derived material remains available under Matt Pocock's MIT License; see `skills/iterative-code-review/LICENSES/mattpocock-skills-MIT.txt`.
 
 ## Validation
 
@@ -79,8 +55,8 @@ The implementation uses only the Python standard library.
 
 ## Attribution
 
-This repository's `iterative-code-review` orchestration is designed to compose Matt Pocock's independently distributed [`code-review`](https://github.com/mattpocock/skills/tree/main/skills/engineering/code-review) skill. No upstream files are bundled here. Matt Pocock's repository is distributed under the [MIT License](https://github.com/mattpocock/skills/blob/main/LICENSE).
+This repository's two-axis review protocol is adapted from Matt Pocock's [`code-review`](https://github.com/mattpocock/skills/tree/main/skills/engineering/code-review) skill, distributed under the [MIT License](https://github.com/mattpocock/skills/blob/main/LICENSE). The iterative orchestration, adjudication model, convergence state checker, and safety stops are original additions in this repository.
 
 ## License
 
-The original content in this repository is licensed under the MIT License. See [LICENSE](LICENSE).
+Original content in this repository is licensed under the MIT License. See [LICENSE](LICENSE). Upstream-derived material retains its original notice in `skills/iterative-code-review/LICENSES/mattpocock-skills-MIT.txt`.

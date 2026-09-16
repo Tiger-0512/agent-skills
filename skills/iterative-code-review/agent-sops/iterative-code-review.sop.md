@@ -8,7 +8,7 @@ Run independent Standards and Spec reviews against a pinned baseline, adjudicate
 
 - **review_target** (required): Repository path and change target, such as the current branch, a branch name, merge request, pull request, or working-tree diff.
 - **fixed_point** (optional, default: "auto"): Commit, branch, tag, or merge-base reference. `auto` means the target branch for a review request or the repository's default branch otherwise.
-- **spec_source** (optional, default: "auto"): Issue, local file, URL, or `none`. `auto` uses the discovery order from the installed `code-review` skill.
+- **spec_source** (optional, default: "auto"): Issue, local file, URL, or `none`. `auto` uses the discovery order from the bundled two-axis review protocol.
 - **max_rounds** (optional, default: 5): Maximum completed review rounds. Five permits several repair passes while bounding cost and churn.
 - **stagnation_rounds** (optional, default: 2): Consecutive no-reduction transitions allowed before stopping. Two tolerates one noisy review while detecting non-convergence.
 - **validation_commands** (optional, default: "auto"): Explicit test, lint, type-check, and build commands. `auto` discovers repository instructions and affected-package checks.
@@ -39,13 +39,12 @@ Resolve the repository and prepare a workspace where iterative repairs cannot di
 
 ### 2. Pin scope and sources
 
-Resolve the fixed point once and identify the specification and standards sources using Matt Pocock's installed `code-review` skill.
+Resolve the fixed point once and identify the specification and standards sources using the bundled two-axis review protocol.
 
 **Constraints:**
-- You MUST verify that the `code-review` skill is available before continuing.
-- If `code-review` is unavailable, You MUST hard stop and provide `npx skills@latest add mattpocock/skills --skill code-review` because this workflow depends on its two-axis review contract.
-- You MUST load the installed `code-review` skill before resolving review sources.
-- If `docs/agents/issue-tracker.md` is missing, You MUST tell the user to run `/setup-matt-pocock-skills` before relying on automatic specification discovery.
+- You MUST read `references/code-review-protocol.md` before resolving review sources.
+- You MUST verify that `references/code-review-protocol.md` and `LICENSES/mattpocock-skills-MIT.txt` are present before continuing.
+- If either bundled file is unavailable, You MUST hard stop because the installation is incomplete and its review contract or required attribution cannot be verified.
 - You MUST resolve `fixed_point` to an immutable commit and compute the three-dot merge-base comparison once.
 - You MUST use the same baseline commit for every round even when `HEAD` changes after repairs.
 - You MUST record the baseline SHA, initial review-head SHA, diff command, commit list, specification source, and standards-source paths.
@@ -67,11 +66,11 @@ Create a state file outside the reviewed diff and initialize it with the pinned 
 
 ### 4. Run a fresh two-axis review
 
-Dispatch Standards and Spec reviewers concurrently in new contexts, following the installed `code-review` skill's prompts and separation rules.
+Dispatch Standards and Spec reviewers concurrently in new contexts, following the bundled two-axis review protocol's prompts and separation rules.
 
 **Constraints:**
 - You MUST give both reviewers the pinned diff command, current commit list, and current review-head SHA.
-- You MUST give the Standards reviewer the discovered standards sources and the complete smell baseline from the installed `code-review` skill.
+- You MUST give the Standards reviewer the discovered standards sources and the complete smell baseline from `references/code-review-protocol.md`.
 - You MUST give the Spec reviewer the resolved specification, unless the user explicitly selected `none`.
 - You MUST require each reviewer to report file, symbol or hunk, rule or requirement citation, severity, evidence, and a concise summary for every candidate.
 - You MUST use fresh reviewer contexts that receive no previous-round findings because prior findings would bias an allegedly independent re-review.
@@ -233,9 +232,9 @@ Allowed values:
 
 ## Troubleshooting
 
-### The required code-review skill is missing
+### The bundled review protocol is missing
 
-Install it with `npx skills@latest add mattpocock/skills --skill code-review`, then run `/setup-matt-pocock-skills` once in the reviewed repository.
+Reinstall `iterative-code-review` from its published source. Do not continue without both the protocol and upstream MIT notice because the review contract and attribution would be incomplete.
 
 ### A reviewer axis fails
 
