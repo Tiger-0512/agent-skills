@@ -1,0 +1,22 @@
+{
+  "adaptation": {
+    "protocol_sha256": "33c5f6d40ce673091aeea345529e9bc437aa51911a73538ab37397179ec8f9c3",
+    "reviewed_commit": "5c89081d4bbeb3d039a42093653f90bb698d780e",
+    "status": "reviewed"
+  },
+  "local": {
+    "adapted_protocol": "references/code-review-protocol.md",
+    "license": "LICENSES/mattpocock-skills-MIT.txt",
+    "source_snapshot": "upstream/code-review.SKILL.md"
+  },
+  "schema_version": 1,
+  "upstream": {
+    "license_path": "LICENSE",
+    "license_sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+    "pinned_commit": "5c89081d4bbeb3d039a42093653f90bb698d780e",
+    "ref": "main",
+    "repository": "mattpocock/skills",
+    "source_path": "skills/engineering/code-review/SKILL.md",
+    "source_sha256": "47f4e52c21694def9c7c11cbfbf891ca35eac7a93e395797515be3c8a409ae50"
+  }
+}

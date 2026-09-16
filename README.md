@@ -35,19 +35,40 @@ Default safety bounds are five completed review rounds and two consecutive no-re
 
 ## Bundled review protocol
 
-The two-axis review protocol is adapted from [Matt Pocock's `code-review` skill](https://www.skills.sh/mattpocock/skills/code-review) at upstream commit [`959a8e9f1edc3adbe2f7e3054bb6fbefa6696260`](https://github.com/mattpocock/skills/commit/959a8e9f1edc3adbe2f7e3054bb6fbefa6696260).
+The two-axis review protocol is adapted from [Matt Pocock's `code-review` skill](https://www.skills.sh/mattpocock/skills/code-review) at the source file's upstream commit [`5c89081d4bbeb3d039a42093653f90bb698d780e`](https://github.com/mattpocock/skills/commit/5c89081d4bbeb3d039a42093653f90bb698d780e).
 
 The adapted protocol and required attribution are shipped inside `iterative-code-review`, so users do not need to install or configure another skill. The bundled upstream-derived material remains available under Matt Pocock's MIT License; see `skills/iterative-code-review/LICENSES/mattpocock-skills-MIT.txt`.
 
-## Validation
+## Upstream updates
 
-Run the deterministic state-checker tests:
+`.github/workflows/update-upstream-code-review.yml` checks the upstream source after changes reach `main`, once a week, and on manual dispatch. When it detects a newer source commit, it updates the pinned snapshot and manifest on an automation branch and opens a **Draft PR**.
+
+The generated PR deliberately sets `adaptation.status` to `pending`. A human must review the upstream comparison, reconcile relevant changes into the active protocol, and run:
 
 ```bash
+python3 scripts/update-upstream-code-review.py mark-reviewed \
+  --manifest skills/iterative-code-review/upstream-code-review.json
+```
+
+`Validate` rejects a pending adaptation, so the update cannot reach a merge-ready state without this review. The workflow never enables auto-merge.
+
+For Draft PR creation, repository Actions settings must allow read/write workflow permissions and GitHub Actions to create pull requests.
+
+## Validation
+
+Run the deterministic state-checker and upstream-maintenance tests:
+
+```bash
+python3 scripts/update-upstream-code-review.py validate \
+  --manifest skills/iterative-code-review/upstream-code-review.json
+
+python3 -m unittest discover -s tests -v
+
 python3 -m unittest discover \
   -s skills/iterative-code-review/tests -v
 
 python3 -m py_compile \
+  scripts/update-upstream-code-review.py \
   skills/iterative-code-review/scripts/review-loop-state.py
 ```
 
