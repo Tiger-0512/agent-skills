@@ -25,11 +25,13 @@ jobs:
         run: |
           python3 -m unittest discover -s tests -v
           python3 -m unittest discover -s skills/standards-spec-review-loop/tests -v
+          python3 -m unittest discover -s skills/pr-review-response-monitor/tests -v
 
       - name: Check Python syntax
         run: |
           python3 -m py_compile scripts/update-upstream-code-review.py
           python3 -m py_compile skills/standards-spec-review-loop/scripts/review-loop-state.py
+          python3 -m py_compile skills/pr-review-response-monitor/scripts/review-monitor-state.py
 
       - name: Check whitespace
         run: git diff --check

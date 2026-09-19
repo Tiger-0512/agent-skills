@@ -2,6 +2,25 @@
 
 Reusable skills for software engineering agents.
 
+## PR Review Response Monitor
+
+`pr-review-response-monitor` periodically scans one GitHub or GitLab repository for open reviews authored by a specified user where another person made the latest human review update. It dispatches one isolated worker per PR/MR, handles valid feedback on distinct source branches in parallel, validates and publishes the fixes, reports the reviewer-facing comments in chat, and resumes bounded monitoring.
+
+### Install
+
+```bash
+npx skills@latest add Tiger-0512/agent-skills --skill pr-review-response-monitor
+```
+
+### Usage
+
+```text
+Use pr-review-response-monitor for repository acme/widgets and target_user alice.
+Scan every 10 minutes, fix valid review feedback, commit, push, comment, and notify me here.
+```
+
+The default safety bounds are 48 scans or eight hours, with at most four concurrent workers. The skill never force-pushes, modifies protected/default branches, approves, merges, or resolves reviewer threads.
+
 ## Standards-Spec Review Loop
 
 `standards-spec-review-loop` repeatedly runs independent Standards and Spec reviews, adjudicates every candidate finding, repairs valid in-scope findings, validates the change, and starts a fresh review round. It succeeds only when both axes have no valid findings and final validation passes.
